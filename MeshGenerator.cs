@@ -25,7 +25,7 @@ public class MeshGenerator : MonoBehaviour
     void Update()
     {
         UpdateMesh();
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
         UpdateMesh();
         for (int i = 0; i < 1000; i++)
@@ -33,6 +33,63 @@ public class MeshGenerator : MonoBehaviour
             runDroplet();
         };
         }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            UpdateMesh();
+            for (int i = 0; i < 2000; i++)
+            {
+                runDroplet();
+            };
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            UpdateMesh();
+            for (int i = 0; i < 3000; i++)
+            {
+                runDroplet();
+            };
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            UpdateMesh();
+            for (int i = 0; i < 4000; i++)
+            {
+                runDroplet();
+            };
+        }
+        if (Input.GetKey(KeyCode.Z))
+        {
+            transform.Rotate(Vector3.up * 30 * Time.deltaTime);
+        };
+        if (Input.GetKey(KeyCode.X))
+        {
+            transform.Rotate(Vector3.up * -30 * Time.deltaTime);
+        };
+        if (Input.GetKey(KeyCode.A))
+        {
+            Vector3 position = transform.position;
+            position.x--;
+            transform.position = position;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            Vector3 position = transform.position;
+            position.x++;
+            transform.position = position;
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+            Vector3 position = transform.position;
+            position.z--;
+            transform.position = position;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            Vector3 position = transform.position;
+            position.z++;
+            transform.position = position;
+        }
+
     }
 
     IEnumerator CreateShape()
