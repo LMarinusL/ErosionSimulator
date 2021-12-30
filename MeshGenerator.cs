@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI; 
+
 
 
 public class MeshGenerator : MonoBehaviour
@@ -13,6 +15,9 @@ public class MeshGenerator : MonoBehaviour
 
     public int xSize = 200;
     public int zSize = 200;
+    public int NumOfIt = 0;
+    public Text numOfIter;
+
 
     void Start()
     {
@@ -24,38 +29,24 @@ public class MeshGenerator : MonoBehaviour
     }
     void Update()
     {
+        numOfIter.text = NumOfIt.ToString();
         UpdateMesh();
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            mesh.Clear();
+            StartCoroutine(CreateShape());
+        }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-        UpdateMesh();
-        for (int i = 0; i < 1000; i++)
-        {
-            runDroplet();
-        };
+            StartCoroutine(iterate(100));
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            UpdateMesh();
-            for (int i = 0; i < 2000; i++)
-            {
-                runDroplet();
-            };
+            StartCoroutine(iterate(200));
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            UpdateMesh();
-            for (int i = 0; i < 3000; i++)
-            {
-                runDroplet();
-            };
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            UpdateMesh();
-            for (int i = 0; i < 4000; i++)
-            {
-                runDroplet();
-            };
+            StartCoroutine(iterate(400));
         }
         if (Input.GetKey(KeyCode.Z))
         {
@@ -80,27 +71,42 @@ public class MeshGenerator : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             Vector3 position = transform.position;
-            position.z--;
+            position.z++;
             transform.position = position;
         }
         if (Input.GetKey(KeyCode.S))
         {
             Vector3 position = transform.position;
-            position.z++;
+            position.z--;
             transform.position = position;
         }
 
     }
 
+    IEnumerator iterate(int num)
+    {
+        for (int j = 0; j < num; j++)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                runDroplet();
+            };
+            yield return new WaitForSeconds(.01f);
+        }
+    }
+
     IEnumerator CreateShape()
     {
+        NumOfIt = 0;
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
-        
-        for(int i = 0, z = 0; z <= zSize; z++)
+        float randomNum1 = Random.Range(0.3f, 2.4f);
+        float randomNum2 = Random.Range(0.3f, 2.4f);
+
+        for (int i = 0, z = 0; z <= zSize; z++)
         {
             for (int x = 0; x<= xSize; x++)
             {
-                float y = (Mathf.PerlinNoise(x * .01f, z * .01f) * 100f) + (Mathf.PerlinNoise(x * .06f, z * .1f) * 5f);
+                float y = (Mathf.PerlinNoise(x * .01f* randomNum1, z * .01f * randomNum2) * 100f) + (Mathf.PerlinNoise(x * .06f, z * .1f) * 5f);
         vertices[i] = new Vector3(x, y, z);
                 i++;
             }
@@ -222,6 +228,7 @@ public class MeshGenerator : MonoBehaviour
 
     void runDroplet()
     {
+        NumOfIt++;
         int locX = Random.Range(1, xSize);
         int locZ = Random.Range(1, zSize);
         int firstIndex = ((xSize + 1) * (locZ - 1)) + locX;
@@ -249,7 +256,6 @@ public class MeshGenerator : MonoBehaviour
                     {
                         if (slope < minSlope || capacity > 3f)
                         {
-                            Debug.Log("slope bigger ");
                             float changeValue = 0f;
                             changeValue = (capacity * slope / 600);
                             changeAround(minHeightIndex, changeValue, capacity);
@@ -275,7 +281,6 @@ public class MeshGenerator : MonoBehaviour
 
     void changeAround(int index, float amount, float capacity)
     {
-        Debug.Log(amount * (Mathf.Pow(capacity, 2f)/10));
         float amountSecond = amount * (Mathf.Pow(capacity,2f)/10);
         int xSizeV = xSize + 1;
         Vector3 local = vertices[index];
