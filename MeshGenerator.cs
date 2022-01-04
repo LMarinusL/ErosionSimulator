@@ -13,8 +13,8 @@ public class MeshGenerator : MonoBehaviour
     Vector3[] vertices;
     int[] triangles;
 
-    public int xSize = 200;
-    public int zSize = 200;
+    public int xSize = 400;
+    public int zSize = 400;
     public int NumOfIt = 0;
     public Text numOfIter;
 
@@ -106,7 +106,7 @@ public class MeshGenerator : MonoBehaviour
         {
             for (int x = 0; x<= xSize; x++)
             {
-                float y = (Mathf.PerlinNoise(x * .01f* randomNum1, z * .01f * randomNum2) * 100f) + (Mathf.PerlinNoise(x * .06f, z * .1f) * 5f);
+                float y = (Mathf.PerlinNoise(x * .01f * randomNum2, z * .01f * randomNum1) * 40f) + (Mathf.PerlinNoise(x * .01f* randomNum1, z * .01f * randomNum2) * 60f) + (Mathf.PerlinNoise(x * .06f, z * .1f) * 5f);
         vertices[i] = new Vector3(x, y, z);
                 i++;
             }
@@ -293,14 +293,14 @@ public class MeshGenerator : MonoBehaviour
         Vector3 CB = vertices[index + 1];
         Vector3 RB = vertices[index + xSizeV + 1];
 
-        vertices[index] = new Vector3(vertices[index].x, vertices[index].y + (amount - amountSecond), vertices[index].z);
-        vertices[index - xSizeV - 1] = new Vector3(vertices[index - xSizeV - 1].x, vertices[index - xSizeV - 1].y + amountSecond, vertices[index - xSizeV - 1].z);
-        vertices[index - 1] = new Vector3(vertices[index - 1].x, vertices[index - 1].y + amountSecond, vertices[index - 1].z);
-        vertices[index + xSizeV - 1] = new Vector3(vertices[index + xSizeV - 1].x, vertices[index + xSizeV - 1].y + amountSecond, vertices[index + xSizeV - 1].z);
-        vertices[index - xSizeV] = new Vector3(vertices[index - xSizeV].x, vertices[index - xSizeV].y + amountSecond, vertices[index - xSizeV].z);
-        vertices[index + xSizeV] = new Vector3(vertices[index + xSizeV].x, vertices[index + xSizeV].y + amountSecond, vertices[index + xSizeV].z);
-        vertices[index - xSizeV + 1] = new Vector3(vertices[index - xSizeV + 1].x, vertices[index - xSizeV + 1].y + amountSecond, vertices[index - xSizeV + 1].z);
-        vertices[index + 1] = new Vector3(vertices[index + 1].x, vertices[index + 1].y + amountSecond, vertices[index + 1].z);
-        vertices[index + xSizeV + 1] = new Vector3(vertices[index + xSizeV + 1].x, vertices[index + xSizeV + 1].y + amountSecond, vertices[index + xSizeV + 1].z);
+        vertices[index] = new Vector3(local.x, local.y + (amount - amountSecond), local.z);
+        vertices[index - xSizeV - 1] = new Vector3(LT.x, LT.y + amountSecond/2, LT.z);
+        vertices[index - 1] = new Vector3(CT.x, CT.y + amountSecond, CT.z);
+        vertices[index + xSizeV - 1] = new Vector3(RT.x, RT.y + amountSecond/2, RT.z);
+        vertices[index - xSizeV] = new Vector3(LM.x, LM.y + amountSecond, LM.z);
+        vertices[index + xSizeV] = new Vector3(RM.x, RM.y + amountSecond, RM.z);
+        vertices[index - xSizeV + 1] = new Vector3(LB.x, LB.y + amountSecond/2, LB.z);
+        vertices[index + 1] = new Vector3(CB.x, CB.y + amountSecond, CB.z);
+        vertices[index + xSizeV + 1] = new Vector3(RB.x, RB.y + amountSecond/2, RB.z);
     }
 }
