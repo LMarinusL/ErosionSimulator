@@ -2,40 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEngine.UI; 
+using UnityEngine.UI;
+
+
 
 
 
 public class MeshGenerator : MonoBehaviour
 {
     Mesh mesh;
+    Color[] colors;
+    public Color color1 = new Color(0.5f, 0.5f, 0.5f, 1f);
+    public Color color2 = new Color(0f, 0.6f, 0.0f, 0.6f);
+    public Color color3 = new Color(0.95f, 0.95f, 0.95f, 1f);
+    public Material material;
+
+
 
     Vector3[] vertices;
     int[] triangles;
 
-    public int xSize = 400;
-    public int zSize = 400;
+    public int xSize = 255;
+    public int zSize = 255;
     public int NumOfIt = 0;
     public Text numOfIter;
-
 
     void Start()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 
-        StartCoroutine(CreateShape());
+        MeshRenderer meshr = this.GetComponent<MeshRenderer>();
+        meshr.material = material;
         
+        StartCoroutine(CreateShape());
+
     }
     void Update()
     {
         numOfIter.text = NumOfIt.ToString();
         UpdateMesh();
+        resetColors();
         if (Input.GetKeyDown(KeyCode.Q))
         {
             mesh.Clear();
             StartCoroutine(CreateShape());
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             StartCoroutine(iterate(100));
@@ -81,6 +94,34 @@ public class MeshGenerator : MonoBehaviour
             transform.position = position;
         }
 
+    }
+
+    void resetColors()
+    {
+        colors = new Color[mesh.normals.ToArray().Length];
+        Vector3[] normals = mesh.normals.ToArray();
+        Vector3[] Vertices = mesh.vertices.ToArray();
+        for (int i = 0; i < normals.Length; i++)
+        {
+            float angle = normals[i].y;
+            float height = Vertices[i].y;
+            if (height > 70)
+            {
+                colors[i] = color3;
+            }
+            else
+            {
+                if (angle < 0.85)
+                {
+                    colors[i] = color1;
+                }
+                else
+                {
+                    colors[i] = color2;
+                }
+            }
+        }
+        mesh.colors = colors;
     }
 
     IEnumerator iterate(int num)
@@ -134,6 +175,8 @@ public class MeshGenerator : MonoBehaviour
 
         }
 
+
+
     }
 
     void UpdateMesh()
@@ -142,6 +185,7 @@ public class MeshGenerator : MonoBehaviour
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
+
     }
 
     private void OnDrawGizmos()
@@ -303,4 +347,7 @@ public class MeshGenerator : MonoBehaviour
         vertices[index + 1] = new Vector3(CB.x, CB.y + amountSecond, CB.z);
         vertices[index + xSizeV + 1] = new Vector3(RB.x, RB.y + amountSecond/2, RB.z);
     }
+
+
+
 }
