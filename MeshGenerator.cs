@@ -12,9 +12,9 @@ public class MeshGenerator : MonoBehaviour
 {
     Mesh mesh;
     Color[] colors;
-    public Color color1 = new Color(0.5f, 0.5f, 0.5f, 1f);
+    public Color color1 = new Color(0f, 0.65f, 0.95f, 95f);
     public Color color2 = new Color(0f, 0.6f, 0.0f, 0.6f);
-    public Color color3 = new Color(0.95f, 0.95f, 0.95f, 1f);
+    public Color color3 = new Color(0.8f, 0.8f, 0.8f, 1f);
     public Material material;
 
 
@@ -43,6 +43,10 @@ public class MeshGenerator : MonoBehaviour
         numOfIter.text = NumOfIt.ToString();
         UpdateMesh();
         resetColors();
+        if (Input.GetKeyDown("escape"))
+        {
+            Application.Quit(); 
+        }
         if (Input.GetKeyDown(KeyCode.Q))
         {
             mesh.Clear();
@@ -105,21 +109,17 @@ public class MeshGenerator : MonoBehaviour
         {
             float angle = normals[i].y;
             float height = Vertices[i].y;
-            if (height > 70)
-            {
-                colors[i] = color3;
-            }
+            if (angle > 0.98 && height < 30) { colors[i] = color1; }
             else
             {
-                if (angle < 0.85)
-                {
-                    colors[i] = color1;
+                if (angle > 0.87 && height > 70) { colors[i] = color3; }
+                else {
+                    if (angle > 0.87 && height < 50) { colors[i] = color2; }
+                    else {
+                        colors[i] = new Color((height / 50) * 0.5f, (height / 50) * 0.4f, (height / 50) * 0.4f, (height / 50) * 0.7f);
+                    }
                 }
-                else
-                {
-                    colors[i] = color2;
                 }
-            }
         }
         mesh.colors = colors;
     }
@@ -276,7 +276,7 @@ public class MeshGenerator : MonoBehaviour
         int locX = Random.Range(1, xSize);
         int locZ = Random.Range(1, zSize);
         int firstIndex = ((xSize + 1) * (locZ - 1)) + locX;
-        int cyclesLeft = 20;
+        int cyclesLeft = 10;
         float capacity = 1f;
         int ownIndex = firstIndex;
         while ( cyclesLeft > 0)
@@ -325,7 +325,7 @@ public class MeshGenerator : MonoBehaviour
 
     void changeAround(int index, float amount, float capacity)
     {
-        float amountSecond = amount * (Mathf.Pow(capacity,2f)/10);
+        float amountSecond = amount * (Mathf.Pow(capacity,2f)/8);
         int xSizeV = xSize + 1;
         Vector3 local = vertices[index];
         Vector3 LT = vertices[index - xSizeV - 1];
@@ -338,14 +338,14 @@ public class MeshGenerator : MonoBehaviour
         Vector3 RB = vertices[index + xSizeV + 1];
 
         vertices[index] = new Vector3(local.x, local.y + (amount - amountSecond), local.z);
-        vertices[index - xSizeV - 1] = new Vector3(LT.x, LT.y + amountSecond/2, LT.z);
+        vertices[index - xSizeV - 1] = new Vector3(LT.x, LT.y + amountSecond * 0.7f, LT.z);
         vertices[index - 1] = new Vector3(CT.x, CT.y + amountSecond, CT.z);
-        vertices[index + xSizeV - 1] = new Vector3(RT.x, RT.y + amountSecond/2, RT.z);
+        vertices[index + xSizeV - 1] = new Vector3(RT.x, RT.y + amountSecond*0.7f, RT.z);
         vertices[index - xSizeV] = new Vector3(LM.x, LM.y + amountSecond, LM.z);
         vertices[index + xSizeV] = new Vector3(RM.x, RM.y + amountSecond, RM.z);
-        vertices[index - xSizeV + 1] = new Vector3(LB.x, LB.y + amountSecond/2, LB.z);
+        vertices[index - xSizeV + 1] = new Vector3(LB.x, LB.y + amountSecond * 0.7f, LB.z);
         vertices[index + 1] = new Vector3(CB.x, CB.y + amountSecond, CB.z);
-        vertices[index + xSizeV + 1] = new Vector3(RB.x, RB.y + amountSecond/2, RB.z);
+        vertices[index + xSizeV + 1] = new Vector3(RB.x, RB.y + amountSecond * 0.7f, RB.z);
     }
 
 
