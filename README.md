@@ -26,3 +26,8 @@ The keys for use are:
 - Q: reload new terrain
 - 1,2,3: iterate 10,000 20,000 or 40,000 drops respectively
 - esc: exit simulation
+
+Planned improvements:
+- Multi Directional Flow (instead of current Single Directional Flow)
+- Different layers of earth, some eroding faster than others
+- Enable landslides when eroded is landscape too steep
