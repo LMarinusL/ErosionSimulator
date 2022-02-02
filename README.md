@@ -3,7 +3,7 @@
 To combine my knowledge of morphodynamics and programming, I started this project to learn Unity and C#.
 With this project, the aim is to implement the natural physics of erosion, sedimentation and other morphological processes. 
 
-### V1.1
+### V0.1
 As simulated waterdrops fall on the terrain, the vertex on which the drop falls is eroded along with the cells alongside.
 The amount of erosion and sedimentation is dependent of the slope between the current vertex, and the next lowest vertex based on 8-connectivity.
 Each drop gets filled with sediment, and looses it when the angle is not sufficient or when it its capacity is full. 
